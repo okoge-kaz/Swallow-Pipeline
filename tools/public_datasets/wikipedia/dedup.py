@@ -31,9 +31,13 @@ def remove_duplicates(input_file, output_file):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Remove duplicate entries based on title from a JSONL file.")
+    parser = argparse.ArgumentParser(
+        description="Remove duplicate entries based on title from a JSONL file."
+    )
     parser.add_argument("--input-jsonl", required=True, help="Path to input JSONL file")
-    parser.add_argument("--output-jsonl", required=True, help="Path to output JSONL file")
+    parser.add_argument(
+        "--output-jsonl", required=True, help="Path to output JSONL file"
+    )
     args = parser.parse_args()
 
     remove_duplicates(args.input_jsonl, args.output_jsonl)

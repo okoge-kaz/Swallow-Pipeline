@@ -13,7 +13,9 @@ from bs4 import BeautifulSoup
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Process Japanese Wikipedia dataset and save as JSONL.")
+    parser = argparse.ArgumentParser(
+        description="Process Japanese Wikipedia dataset and save as JSONL."
+    )
     parser.add_argument(
         "--input-dir",
         type=str,
@@ -52,7 +54,10 @@ def load_jsonl(example: Dict) -> Dict:
     abstract = example.get("abstract")
     templates: List[str] = [t["name"] for t in example.get("templates", [])]
 
-    is_disambiguation_page = any("Template:Dmbox" in template or "Template:Aimai" in template for template in templates)
+    is_disambiguation_page = any(
+        "Template:Dmbox" in template or "Template:Aimai" in template
+        for template in templates
+    )
     is_sexual_page = any("Template:性的" in template for template in templates)
     is_violent_page = any("Template:暴力的" in template for template in templates)
 
@@ -116,7 +121,9 @@ def mapping_jsonl(example: Dict) -> Dict:
             if section_title in SECTIONS_TO_IGNORE:
                 continue
 
-            current_title = "概要" if paragraph_id == 0 and not section_title else section_title
+            current_title = (
+                "概要" if paragraph_id == 0 and not section_title else section_title
+            )
 
             paragraphs.append(
                 {
@@ -146,11 +153,15 @@ def process(example: Dict) -> Dict:
     sections = []
     for section_id, (title, texts) in enumerate(section_dict.items()):
         combined_text = "\n\n".join(text for text in texts if text)
-        sections.append({"section_id": section_id, "title": title, "text": combined_text})
+        sections.append(
+            {"section_id": section_id, "title": title, "text": combined_text}
+        )
 
     # Combine all section texts for the 'text' field
     all_text = "\n\n".join(
-        f"## {section['title']}\n\n{section['text']}" if section["title"] else section["text"]
+        f"## {section['title']}\n\n{section['text']}"
+        if section["title"]
+        else section["text"]
         for section in sections
         if section["text"]
     )
@@ -201,14 +212,21 @@ def main():
     filter_disambig_start = time.time()
     if not args.include_disambiguation_page:
         dataset = dataset.filter(
-            lambda x: not x["is_disambiguation_page"], num_proc=args.num_proc, desc="Filtering disambiguation pages"
+            lambda x: not x["is_disambiguation_page"],
+            num_proc=args.num_proc,
+            desc="Filtering disambiguation pages",
         )  # type: ignore
-    print(f"Filtering disambiguation pages took {time.time() - filter_disambig_start:.2f} seconds")
+    print(
+        f"Filtering disambiguation pages took {time.time() - filter_disambig_start:.2f} seconds"
+    )
 
     # Map HTML to paragraphs
     map_start = time.time()
     dataset = dataset.map(
-        mapping_jsonl, remove_columns=["html"], num_proc=args.num_proc, desc="Mapping HTML to paragraphs"
+        mapping_jsonl,
+        remove_columns=["html"],
+        num_proc=args.num_proc,
+        desc="Mapping HTML to paragraphs",
     )
     print(f"Mapping HTML to paragraphs took {time.time() - map_start:.2f} seconds")
 
