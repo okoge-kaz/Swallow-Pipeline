@@ -9,6 +9,7 @@ dependencies = [
     "matplotlib>=3.10.6",
     "numpy>=2.2.6",
     "pydantic>=2.11.7",
+    "ruff>=0.12.11",
     "seaborn>=0.13.2",
     "transformers>=4.56.0",
     "vllm>=0.10.1.1",
