@@ -1,6 +1,7 @@
 {
   "cSpell.words": [
-    "humaneval"
+    "humaneval",
+    "nemotron"
   ],
   "files.watcherExclude": {
     "**/.git/objects/**": true,
