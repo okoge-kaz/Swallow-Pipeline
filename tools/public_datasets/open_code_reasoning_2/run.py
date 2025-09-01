@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 
-def process_jsonl_file(input_file: Path, output_file: Path) -> None:
+def process_jsonl_file(input_file: Path, output_file: Path, mode: str) -> None:
     if not Path(input_file).exists():
         raise FileNotFoundError(f"Input file not found: {input_file}")
 
@@ -35,11 +35,18 @@ def process_jsonl_file(input_file: Path, output_file: Path) -> None:
                 if data["judgement"] != "right":
                     filtered_count += 1
                     continue
-                required_fields = ["question", "r1_generation"]
+
+                required_fields = ["question"]
+                if mode == "solution":
+                    required_fields.append("solution")
+                elif mode == "r1_generation":
+                    required_fields.append("r1_generation")
+                else:
+                    raise ValueError(f"Unsupported mode: {mode}")
+
                 missing_fields = [
                     field for field in required_fields if field not in data
                 ]
-
                 if missing_fields:
                     print(
                         f"Warning: {line_num}'s data is missing fields: {', '.join(missing_fields)}",
@@ -48,12 +55,21 @@ def process_jsonl_file(input_file: Path, output_file: Path) -> None:
                     error_count += 1
                     continue
 
-                text_content = (
-                    "Question:\n\n"
-                    + str(data["question"])
-                    + "\n\nSolution:\n\n"
-                    + str(data["r1_generation"])
-                )
+                # construct text based on mode
+                if mode == "solution":
+                    text_content = (
+                        "Question:\n\n"
+                        + str(data["question"])
+                        + "\n\nSolution:\n\n"
+                        + str(data["solution"])
+                    )
+                else:  # r1_generation
+                    text_content = (
+                        "Question:\n\n"
+                        + str(data["question"])
+                        + "\n\nSolution:\n\n"
+                        + str(data["r1_generation"])
+                    )
 
                 output_data = data.copy()
                 output_data["text"] = text_content
@@ -82,11 +98,17 @@ def main():
     )
     parser.add_argument("--input-jsonl", required=True)
     parser.add_argument("--output-jsonl", required=True)
+    parser.add_argument(
+        "--mode",
+        required=True,
+        choices=["solution", "r1_generation"],
+        help="choose whether to use 'solution' or 'r1_generation' field for Solution text",
+    )
 
     args = parser.parse_args()
 
     try:
-        process_jsonl_file(args.input_jsonl, args.output_jsonl)
+        process_jsonl_file(args.input_jsonl, args.output_jsonl, args.mode)
     except Exception as e:
         print(f"Error: {e}", flush=True)
         return 1
