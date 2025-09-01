@@ -1,0 +1,15 @@
+[project]
+name = "swallow-pipeline"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flashinfer-python>=0.3.0",
+    "matplotlib>=3.10.6",
+    "numpy>=2.2.6",
+    "pydantic>=2.11.7",
+    "seaborn>=0.13.2",
+    "transformers>=4.56.0",
+    "vllm>=0.10.1.1",
+]
