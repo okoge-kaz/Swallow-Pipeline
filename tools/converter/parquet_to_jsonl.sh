@@ -20,7 +20,7 @@ export TMP="$USER_DIR/tmp"
 export TMP_DIR="$USER_DIR/tmp"
 export HF_HOME="$USER_DIR/hf_cache"
 
-PARQUET_FILE_DIR="/groups/gag51395/datasets/raw/pretrain/ParallelCorpus/data"
+PARQUET_FILE_DIR="/groups/gch51639/fujii/datasets/raw/instruct/public/Nemotron-Post-Training-Dataset-v2/data"
 JSONL_FILE_DIR="$PARQUET_FILE_DIR-jsonl"
 mkdir -p "${JSONL_FILE_DIR}"
 
