@@ -30,7 +30,7 @@ def process_jsonl_file(input_file: Path, output_file: Path, mode: str) -> None:
                     continue
 
                 if "input" in data:
-                    data["question"] = data.pop("input")
+                    data["question"] = data.pop("input").replace("Solve the following problem. Make sure to put the answer (and only answer) inside \\boxed{}.", "").strip()
                 if "output" in data:
                     data["r1_generation"] = data.pop("output")
                     # remove <think> ... </think> content if exists
