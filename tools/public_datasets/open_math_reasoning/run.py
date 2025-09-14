@@ -15,9 +15,15 @@ def process_jsonl_files(input_directory: str, output_file: str) -> None:
     jsonl_files = list(input_path.glob("*.jsonl"))
 
     if not jsonl_files:
-        print(f"Warning: No JSONL files found in the directory: {input_directory}", flush=True)
+        print(
+            f"Warning: No JSONL files found in the directory: {input_directory}",
+            flush=True,
+        )
         return
-    print(f"Found {len(jsonl_files)} JSONL files in the directory: {input_directory}", flush=True)
+    print(
+        f"Found {len(jsonl_files)} JSONL files in the directory: {input_directory}",
+        flush=True,
+    )
 
     processed_count = 0
 
@@ -36,8 +42,14 @@ def process_jsonl_files(input_directory: str, output_file: str) -> None:
                         try:
                             data = json.loads(line)
 
-                            required_fields = ["problem", "generated_solution", "expected_answer"]
-                            missing_fields = [field for field in required_fields if field not in data]
+                            required_fields = [
+                                "problem",
+                                "generated_solution",
+                                "expected_answer",
+                            ]
+                            missing_fields = [
+                                field for field in required_fields if field not in data
+                            ]
 
                             if missing_fields:
                                 print(
@@ -59,11 +71,15 @@ def process_jsonl_files(input_directory: str, output_file: str) -> None:
                             output_data = data.copy()
                             output_data["text"] = text_content
 
-                            outfile.write(json.dumps(output_data, ensure_ascii=False) + "\n")
+                            outfile.write(
+                                json.dumps(output_data, ensure_ascii=False) + "\n"
+                            )
                             processed_count += 1
 
                         except json.JSONDecodeError as e:
-                            print(f"Error: {jsonl_file.name}:{line_num} - JSON decode error: {e}")
+                            print(
+                                f"Error: {jsonl_file.name}:{line_num} - JSON decode error: {e}"
+                            )
                             continue
 
             except Exception as e:
@@ -75,7 +91,12 @@ def process_jsonl_files(input_directory: str, output_file: str) -> None:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--directory", type=str, required=True, help="input directory containing JSONL files")
+    parser.add_argument(
+        "--directory",
+        type=str,
+        required=True,
+        help="input directory containing JSONL files",
+    )
     parser.add_argument("--output-jsonl", required=True, help="output JSONL file path")
     args = parser.parse_args()
 

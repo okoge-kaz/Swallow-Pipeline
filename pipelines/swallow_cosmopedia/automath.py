@@ -38,7 +38,12 @@ SYSTEM_PROMPT = """You are an expert math educator tasked with creating syntheti
 class DataGenerationPipeline:
     """Generic data generation pipeline for any type of content"""
 
-    def __init__(self, model_name: str, tensor_parallel_size: int = 1, model_max_length: int = 131072):
+    def __init__(
+        self,
+        model_name: str,
+        tensor_parallel_size: int = 1,
+        model_max_length: int = 131072,
+    ):
         self.model_name = model_name
         self.tensor_parallel_size = tensor_parallel_size
         self.model_max_length = model_max_length
@@ -49,7 +54,11 @@ class DataGenerationPipeline:
         self.enable_thinking = enable
 
     def generate_from_prompts(
-        self, prompts: list[str], max_new_tokens: int = 2048, temperature: float = 0.7, top_p: float = 1.0
+        self,
+        prompts: list[str],
+        max_new_tokens: int = 2048,
+        temperature: float = 0.7,
+        top_p: float = 1.0,
     ) -> list[str]:
         """
         Generate responses from prompts using the language model
@@ -58,15 +67,22 @@ class DataGenerationPipeline:
         from vllm import LLM, SamplingParams
 
         llm = LLM(
-            model=self.model_name, tensor_parallel_size=self.tensor_parallel_size, max_model_len=self.model_max_length
+            model=self.model_name,
+            tensor_parallel_size=self.tensor_parallel_size,
+            max_model_len=self.model_max_length,
         )
 
-        sampling_params = SamplingParams(temperature=temperature, top_p=top_p, max_tokens=max_new_tokens)
+        sampling_params = SamplingParams(
+            temperature=temperature, top_p=top_p, max_tokens=max_new_tokens
+        )
 
         # Apply chat template with thinking mode
         formatted_prompts = []
         for prompt in prompts:
-            messages = [{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": prompt}]
+            messages = [
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ]
             formatted_prompt = llm.get_tokenizer().apply_chat_template(
                 messages,  # type: ignore
                 tokenize=False,
@@ -80,17 +96,24 @@ class DataGenerationPipeline:
 
 
 def get_generation_pipeline(
-    model_name: str, tensor_parallel_size: int = 1, model_max_length: int = 131072, enable_thinking: bool = True
+    model_name: str,
+    tensor_parallel_size: int = 1,
+    model_max_length: int = 131072,
+    enable_thinking: bool = True,
 ) -> DataGenerationPipeline:
     """Get data generation pipeline with thinking mode configuration"""
 
-    pipeline = DataGenerationPipeline(model_name, tensor_parallel_size, model_max_length)
+    pipeline = DataGenerationPipeline(
+        model_name, tensor_parallel_size, model_max_length
+    )
     pipeline.set_thinking_mode(enable_thinking)
 
     return pipeline
 
 
-def stream_jsonl(file_path: Path, batch_size: int = 1024) -> Iterator[list[dict[str, Any]]]:
+def stream_jsonl(
+    file_path: Path, batch_size: int = 1024
+) -> Iterator[list[dict[str, Any]]]:
     """Stream JSONL file in batches"""
     batch = []
     with file_path.open("r", encoding="utf-8") as fin:
@@ -182,7 +205,9 @@ def llm_data_generation(
                     fout.write(json.dumps(item, ensure_ascii=False) + "\n")
 
     actual_time = time.time() - start_time
-    print(f"LLM data generation completed: {actual_time:.1f}s total ({actual_time / total_items:.3f}s per item)")
+    print(
+        f"LLM data generation completed: {actual_time:.1f}s total ({actual_time / total_items:.3f}s per item)"
+    )
 
 
 # === CLI Entrypoint ===
@@ -193,23 +218,60 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LLM Data Generation Pipeline")
 
     # Data generation subcommand
-    parser.add_argument("--input-jsonl", type=Path, required=True, help="Input JSONL file with prompts")
-    parser.add_argument("--output-jsonl", type=Path, required=True, help="Output JSONL file with generated data")
-    parser.add_argument("--model", type=str, default="qwen-3", help="Model identifier for inference")
-    parser.add_argument("--batch-size", type=int, default=32, help="Batch size for GPU processing")
     parser.add_argument(
-        "--tensor-parallel-size", type=int, default=1, help="Number of GPUs to use for tensor parallelism"
-    )
-    parser.add_argument("--model-max-length", type=int, default=40960, help="Maximum model length")
-    parser.add_argument(
-        "--enable-thinking", action="store_true", default=False, help="Enable thinking mode (<think> tags)"
+        "--input-jsonl", type=Path, required=True, help="Input JSONL file with prompts"
     )
     parser.add_argument(
-        "--disable-thinking", action="store_true", default=False, help="Explicitly disable thinking mode"
+        "--output-jsonl",
+        type=Path,
+        required=True,
+        help="Output JSONL file with generated data",
     )
-    parser.add_argument("--prompt-key", type=str, default="prompt", help="Key in JSON object containing the prompt")
-    parser.add_argument("--output-key", type=str, default="generated_text", help="Key to store generated text")
-    parser.add_argument("--max-new-tokens", type=int, default=20480, help="Maximum number of new tokens to generate")
+    parser.add_argument(
+        "--model", type=str, default="qwen-3", help="Model identifier for inference"
+    )
+    parser.add_argument(
+        "--batch-size", type=int, default=32, help="Batch size for GPU processing"
+    )
+    parser.add_argument(
+        "--tensor-parallel-size",
+        type=int,
+        default=1,
+        help="Number of GPUs to use for tensor parallelism",
+    )
+    parser.add_argument(
+        "--model-max-length", type=int, default=40960, help="Maximum model length"
+    )
+    parser.add_argument(
+        "--enable-thinking",
+        action="store_true",
+        default=False,
+        help="Enable thinking mode (<think> tags)",
+    )
+    parser.add_argument(
+        "--disable-thinking",
+        action="store_true",
+        default=False,
+        help="Explicitly disable thinking mode",
+    )
+    parser.add_argument(
+        "--prompt-key",
+        type=str,
+        default="prompt",
+        help="Key in JSON object containing the prompt",
+    )
+    parser.add_argument(
+        "--output-key",
+        type=str,
+        default="generated_text",
+        help="Key to store generated text",
+    )
+    parser.add_argument(
+        "--max-new-tokens",
+        type=int,
+        default=20480,
+        help="Maximum number of new tokens to generate",
+    )
 
     args = parser.parse_args()
 

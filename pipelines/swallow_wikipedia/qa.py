@@ -73,9 +73,15 @@ Answer: クロロフィルの吸収スペクトルは、主に青と赤の波長
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments with clear defaults and type hints."""
     parser = argparse.ArgumentParser(description="Generate QA from JSONL using vLLM.")
-    parser.add_argument("--input-jsonl", type=str, required=True, help="Path to input JSONL file.")
-    parser.add_argument("--output-jsonl", type=str, required=True, help="Path to output JSONL file.")
-    parser.add_argument("--model-path", type=str, required=True, help="Path to the vLLM model.")
+    parser.add_argument(
+        "--input-jsonl", type=str, required=True, help="Path to input JSONL file."
+    )
+    parser.add_argument(
+        "--output-jsonl", type=str, required=True, help="Path to output JSONL file."
+    )
+    parser.add_argument(
+        "--model-path", type=str, required=True, help="Path to the vLLM model."
+    )
     parser.add_argument(
         "--qa-mode",
         type=str,
@@ -83,7 +89,12 @@ def parse_args() -> argparse.Namespace:
         default="choices",
         help="QA mode: 'choices' for multiple-choice, 'free' for open-ended.",
     )
-    parser.add_argument("--batch-size", type=int, default=4096, help="Batch size for processing and saving.")
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=4096,
+        help="Batch size for processing and saving.",
+    )
     parser.add_argument(
         "--lang",
         type=str,
@@ -91,9 +102,21 @@ def parse_args() -> argparse.Namespace:
         default="ja",
         help="Prompt language: 'ja' (Japanese) or 'en' (English).",
     )
-    parser.add_argument("--chunk-max-tokens", type=int, default=1024, help="Max tokens per text chunk.")
-    parser.add_argument("--gen-max-tokens", type=int, default=16384, help="Max tokens for generated output.")
-    parser.add_argument("--tensor-parallel-size", type=int, default=1, help="Tensor parallel size for vLLM.")
+    parser.add_argument(
+        "--chunk-max-tokens", type=int, default=1024, help="Max tokens per text chunk."
+    )
+    parser.add_argument(
+        "--gen-max-tokens",
+        type=int,
+        default=16384,
+        help="Max tokens for generated output.",
+    )
+    parser.add_argument(
+        "--tensor-parallel-size",
+        type=int,
+        default=1,
+        help="Tensor parallel size for vLLM.",
+    )
     return parser.parse_args()
 
 
@@ -136,12 +159,42 @@ def parse_generated_text(text: str, qa_mode: str) -> Dict[str, Union[str, List[s
 
     try:
         if qa_mode == "choices":
-            qa["question"] = next((line.split("Question: ")[1] for line in lines if line.startswith("Question: ")), "")
-            qa["options"] = [line for line in lines if line.startswith(("A.", "B.", "C.", "D."))]
-            qa["answer"] = next((line.split("Answer: ")[1] for line in lines if line.startswith("Answer: ")), "")
+            qa["question"] = next(
+                (
+                    line.split("Question: ")[1]
+                    for line in lines
+                    if line.startswith("Question: ")
+                ),
+                "",
+            )
+            qa["options"] = [
+                line for line in lines if line.startswith(("A.", "B.", "C.", "D."))
+            ]
+            qa["answer"] = next(
+                (
+                    line.split("Answer: ")[1]
+                    for line in lines
+                    if line.startswith("Answer: ")
+                ),
+                "",
+            )
         else:
-            qa["question"] = next((line.split("Question: ")[1] for line in lines if line.startswith("Question: ")), "")
-            qa["answer"] = next((line.split("Answer: ")[1] for line in lines if line.startswith("Answer: ")), "")
+            qa["question"] = next(
+                (
+                    line.split("Question: ")[1]
+                    for line in lines
+                    if line.startswith("Question: ")
+                ),
+                "",
+            )
+            qa["answer"] = next(
+                (
+                    line.split("Answer: ")[1]
+                    for line in lines
+                    if line.startswith("Answer: ")
+                ),
+                "",
+            )
     except Exception as e:
         qa = {"error": f"Failed to parse {qa_mode} QA: {str(e)}"}
 
@@ -215,7 +268,9 @@ def process_batch(
                             + f"\nAnswer: {qa['answer']}\n"
                         )
                     else:
-                        item["text"] += f"\n\nQuestion: {qa['question']}\nAnswer: {qa['answer']}\n"
+                        item["text"] += (
+                            f"\n\nQuestion: {qa['question']}\nAnswer: {qa['answer']}\n"
+                        )
         item["question_answers"] = item_qas
 
     return processed_lines
@@ -239,7 +294,13 @@ def main():
     for start_idx in range(0, len(lines), args.batch_size):
         batch_lines = lines[start_idx : start_idx + args.batch_size]
         processed_lines = process_batch(
-            batch_lines, tokenizer, llm, prompt_template, args.chunk_max_tokens, args.gen_max_tokens, args.qa_mode
+            batch_lines,
+            tokenizer,
+            llm,
+            prompt_template,
+            args.chunk_max_tokens,
+            args.gen_max_tokens,
+            args.qa_mode,
         )
         save_to_jsonl(args.output_jsonl, processed_lines)
 

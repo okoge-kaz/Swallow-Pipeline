@@ -12,20 +12,33 @@ from typing import Iterable, Optional, Tuple, List, Dict
 THINK_PATTERN = re.compile(r"<think>.*?</think>", flags=re.DOTALL)
 
 MATH_SOURCES = {s.lower() for s in ["OpenMathReasoning", "NuminaMath-CoT"]}
-CODE_SOURCES = {s.lower() for s in ["OpenCodeReasoning", "MagicoderEvolInstruct", "opc-sft-stage2", "leetcode", "TACO", "apps"]}
+CODE_SOURCES = {
+    s.lower()
+    for s in [
+        "OpenCodeReasoning",
+        "MagicoderEvolInstruct",
+        "opc-sft-stage2",
+        "leetcode",
+        "TACO",
+        "apps",
+    ]
+}
+
 
 def open_maybe_gzip(path: Path, mode: str):
     if path.suffix == ".gz":
         return gzip.open(path, mode, encoding="utf-8", newline="")
     return open(path, mode, encoding="utf-8", newline="")
 
+
 def clean_think(text: str) -> str:
     """Remove <think>...</think> and any leading newlines after removal."""
     if not text:
         return text
     cleaned = THINK_PATTERN.sub("", text)
-    cleaned = re.sub(r'^(?:\r?\n)+', '', cleaned)
+    cleaned = re.sub(r"^(?:\r?\n)+", "", cleaned)
     return cleaned
+
 
 def iter_jsonl_records(path: Path) -> Iterable[Tuple[int, dict]]:
     with open_maybe_gzip(path, "rt") as f:
@@ -36,9 +49,12 @@ def iter_jsonl_records(path: Path) -> Iterable[Tuple[int, dict]]:
             try:
                 obj = json.loads(line)
             except json.JSONDecodeError as e:
-                print(f"[WARN] {path}: line {i}: JSON decode error: {e}", file=sys.stderr)
+                print(
+                    f"[WARN] {path}: line {i}: JSON decode error: {e}", file=sys.stderr
+                )
                 continue
             yield i, obj
+
 
 def build_output_item(data: dict, keep_think: bool) -> Optional[dict]:
     if "input" not in data or "output" not in data:
@@ -54,6 +70,7 @@ def build_output_item(data: dict, keep_think: bool) -> Optional[dict]:
             {"role": "assistant", "content": out},
         ],
     }
+
 
 def extract_source(data: dict) -> Optional[str]:
     """
@@ -85,6 +102,7 @@ def extract_source(data: dict) -> Optional[str]:
                 return known
     return None
 
+
 def categorize_source(src_lc: Optional[str]) -> Optional[str]:
     if src_lc is None:
         return None
@@ -93,6 +111,7 @@ def categorize_source(src_lc: Optional[str]) -> Optional[str]:
     if src_lc in CODE_SOURCES:
         return "code"
     return None
+
 
 def process_one_file(args) -> Tuple[Path, Path, Dict[str, int]]:
     """
@@ -119,7 +138,10 @@ def process_one_file(args) -> Tuple[Path, Path, Dict[str, int]]:
             item = build_output_item(obj, keep_think=keep_think)
             if item is None:
                 skipped += 1
-                print(f"[WARN] {in_path}: line {line_no}: missing 'input' or 'output', skipped.", file=sys.stderr)
+                print(
+                    f"[WARN] {in_path}: line {line_no}: missing 'input' or 'output', skipped.",
+                    file=sys.stderr,
+                )
                 continue
             if cat == "math":
                 f_math.write(json.dumps(item, ensure_ascii=False) + "\n")
@@ -139,10 +161,14 @@ def process_one_file(args) -> Tuple[Path, Path, Dict[str, int]]:
     }
     return math_tmp, code_tmp, stats
 
+
 def discover_input_files(input_dir: Path, recursive: bool) -> List[Path]:
     if recursive:
-        return sorted(list(input_dir.rglob("*.jsonl")) + list(input_dir.rglob("*.jsonl.gz")))
+        return sorted(
+            list(input_dir.rglob("*.jsonl")) + list(input_dir.rglob("*.jsonl.gz"))
+        )
     return sorted(list(input_dir.glob("*.jsonl")) + list(input_dir.glob("*.jsonl.gz")))
+
 
 def merge_files(temp_files: List[Path], output_path: Path) -> int:
     count = 0
@@ -157,16 +183,39 @@ def merge_files(temp_files: List[Path], output_path: Path) -> int:
                     count += 1
     return count
 
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Build JSONL (text + conversation) from inputs, categorized by source into math/code."
     )
-    parser.add_argument("--input-dir", type=Path, required=True, help="Directory containing *.jsonl or *.jsonl.gz")
-    parser.add_argument("--output-dir", type=Path, required=True, help="Directory to write train_math.jsonl / train_code.jsonl")
-    parser.add_argument("--num-proc", type=int, default=max(1, cpu_count() // 2), help="Worker processes")
-    parser.add_argument("--with-think-trajectory", action="store_true", help="Keep <think>…</think> content if set")
-    parser.add_argument("--recursive", action="store_true", help="Recursively search input files")
+    parser.add_argument(
+        "--input-dir",
+        type=Path,
+        required=True,
+        help="Directory containing *.jsonl or *.jsonl.gz",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        required=True,
+        help="Directory to write train_math.jsonl / train_code.jsonl",
+    )
+    parser.add_argument(
+        "--num-proc",
+        type=int,
+        default=max(1, cpu_count() // 2),
+        help="Worker processes",
+    )
+    parser.add_argument(
+        "--with-think-trajectory",
+        action="store_true",
+        help="Keep <think>…</think> content if set",
+    )
+    parser.add_argument(
+        "--recursive", action="store_true", help="Recursively search input files"
+    )
     return parser.parse_args()
+
 
 def main() -> None:
     args = parse_args()
@@ -176,7 +225,10 @@ def main() -> None:
     num_proc: int = max(1, args.num_proc)
 
     if not input_dir.exists() or not input_dir.is_dir():
-        print(f"[ERROR] --input-dir not found or not a directory: {input_dir}", file=sys.stderr)
+        print(
+            f"[ERROR] --input-dir not found or not a directory: {input_dir}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     files = discover_input_files(input_dir, args.recursive)
@@ -199,7 +251,7 @@ def main() -> None:
                     results.append(res)
                     mtmp, ctmp, stats = res
                     print(
-                        f"[INFO] {Path(mtmp).name.replace('.math.tmp.jsonl','')}: "
+                        f"[INFO] {Path(mtmp).name.replace('.math.tmp.jsonl', '')}: "
                         f"math={stats['written_math']}, code={stats['written_code']}, "
                         f"skipped={stats['skipped']}, unknown_source={stats['unknown_source']}",
                         file=sys.stderr,
@@ -209,8 +261,12 @@ def main() -> None:
             sys.exit(130)
 
         # preserve deterministic merge order following sorted input files
-        math_map = {Path(r[0]).name.replace(".math.tmp.jsonl",""): Path(r[0]) for r in results}
-        code_map = {Path(r[1]).name.replace(".code.tmp.jsonl",""): Path(r[1]) for r in results}
+        math_map = {
+            Path(r[0]).name.replace(".math.tmp.jsonl", ""): Path(r[0]) for r in results
+        }
+        code_map = {
+            Path(r[1]).name.replace(".code.tmp.jsonl", ""): Path(r[1]) for r in results
+        }
 
         ordered_math_tmps = [math_map.get(f.name, None) for f in files]
         ordered_code_tmps = [code_map.get(f.name, None) for f in files]
@@ -225,6 +281,7 @@ def main() -> None:
 
         print(f"[INFO] Wrote {out_math} (lines={total_math})", file=sys.stderr)
         print(f"[INFO] Wrote {out_code} (lines={total_code})", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()

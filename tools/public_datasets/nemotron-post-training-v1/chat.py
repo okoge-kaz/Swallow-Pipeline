@@ -14,10 +14,24 @@ def load_jsonl(path: Path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Fill missing user content from lmsys-chat-1m dataset")
-    parser.add_argument("--input-jsonl", type=Path, required=True, help="Input JSONL file with uuid and messages")
-    parser.add_argument("--lmsys-chat-1m-paths", type=Path, required=True, help="JSONL file or directory containing lmsys-chat-1m data")
-    parser.add_argument("--output-jsonl", type=Path, required=True, help="Output JSONL file")
+    parser = argparse.ArgumentParser(
+        description="Fill missing user content from lmsys-chat-1m dataset"
+    )
+    parser.add_argument(
+        "--input-jsonl",
+        type=Path,
+        required=True,
+        help="Input JSONL file with uuid and messages",
+    )
+    parser.add_argument(
+        "--lmsys-chat-1m-paths",
+        type=Path,
+        required=True,
+        help="JSONL file or directory containing lmsys-chat-1m data",
+    )
+    parser.add_argument(
+        "--output-jsonl", type=Path, required=True, help="Output JSONL file"
+    )
     args = parser.parse_args()
 
     # Load input
@@ -46,18 +60,28 @@ def main():
             conv_id = metadata_dict.get("conversation_id", "")
             conversation = item.get("messages", [])
 
-            if conversation and conversation[0].get("role") == "user" and not conversation[0].get("content"):
+            if (
+                conversation
+                and conversation[0].get("role") == "user"
+                and not conversation[0].get("content")
+            ):
                 if conv_id in lmsys_data and lmsys_data[conv_id]:
-                    conversation[0]["content"] = lmsys_data[conv_id][0].get("content", "")
+                    conversation[0]["content"] = lmsys_data[conv_id][0].get(
+                        "content", ""
+                    )
 
-            json.dump({
-                "conversation_id": conv_id,
-                "conversation": conversation,
-                "license": item.get("license", ""),
-                "generator": item.get("generator", ""),
-                "category": item.get("category", ""),
-                "reasoning": item.get("reasoning", ""),
-            }, out_f, ensure_ascii=False)
+            json.dump(
+                {
+                    "conversation_id": conv_id,
+                    "conversation": conversation,
+                    "license": item.get("license", ""),
+                    "generator": item.get("generator", ""),
+                    "category": item.get("category", ""),
+                    "reasoning": item.get("reasoning", ""),
+                },
+                out_f,
+                ensure_ascii=False,
+            )
             out_f.write("\n")
 
 
