@@ -33,9 +33,7 @@ def convert_with_hf_dataset(parquet_file_path: str, jsonl_file_path: str) -> boo
         return False
 
 
-def convert_with_pyarrow(
-    parquet_file_path: str, jsonl_file_path: str, batch_size: int = 65536
-) -> None:
+def convert_with_pyarrow(parquet_file_path: str, jsonl_file_path: str, batch_size: int = 65536) -> None:
     """
     Robust fallback using PyArrow streaming. Does not depend on HF features metadata.
     """
@@ -54,9 +52,7 @@ def convert_parquet_to_jsonl(parquet_file_path: str, jsonl_file_path: str) -> No
     if not ok:
         convert_with_pyarrow(parquet_file_path, jsonl_file_path)
 
-    print(
-        f"Parquet file '{parquet_file_path}' has been converted to JSONL and saved as '{jsonl_file_path}'."
-    )
+    print(f"Parquet file '{parquet_file_path}' has been converted to JSONL and saved as '{jsonl_file_path}'.")
 
 
 def main() -> None:
@@ -69,9 +65,7 @@ def main() -> None:
         required=True,
         help="Path to the input Parquet file.",
     )
-    parser.add_argument(
-        "--jsonl-file", type=str, required=True, help="Path to the output JSONL file."
-    )
+    parser.add_argument("--jsonl-file", type=str, required=True, help="Path to the output JSONL file.")
     args = parser.parse_args()
 
     in_path = Path(args.parquet_file)

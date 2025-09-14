@@ -4,9 +4,7 @@ import numpy as np
 import argparse
 
 # Parse command-line arguments
-parser = argparse.ArgumentParser(
-    description="Plot HumanEval and HumanEval+ scores for selected experiments."
-)
+parser = argparse.ArgumentParser(description="Plot HumanEval and HumanEval+ scores for selected experiments.")
 parser.add_argument(
     "--exp",
     type=str,

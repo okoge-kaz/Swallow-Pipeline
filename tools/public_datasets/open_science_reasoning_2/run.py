@@ -45,26 +45,16 @@ def process_jsonl_file(input_file: Path, output_file: Path, mode: str) -> None:
                     if "<think>" in r1_generation and "</think>" in r1_generation:
                         start = r1_generation.index("<think>")
                         end = r1_generation.index("</think>")
-                        data["solution"] = (
-                            r1_generation[:start] + r1_generation[end:]
-                        ).strip()
+                        data["solution"] = (r1_generation[:start] + r1_generation[end:]).strip()
                     else:
                         data["solution"] = r1_generation
 
                 # construct text based on mode
                 if mode == "solution":
-                    text_content = (
-                        "Question:\n\n"
-                        + str(data["question"])
-                        + "\n\nSolution:\n\n"
-                        + str(data["solution"])
-                    )
+                    text_content = "Question:\n\n" + str(data["question"]) + "\n\nSolution:\n\n" + str(data["solution"])
                 else:  # r1_generation
                     text_content = (
-                        "Question:\n\n"
-                        + str(data["question"])
-                        + "\n\nSolution:\n\n"
-                        + str(data["r1_generation"])
+                        "Question:\n\n" + str(data["question"]) + "\n\nSolution:\n\n" + str(data["r1_generation"])
                     )
 
                 output_data = data.copy()
@@ -89,9 +79,7 @@ def process_jsonl_file(input_file: Path, output_file: Path, mode: str) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="extract and process JSONL data where judgement=='right'"
-    )
+    parser = argparse.ArgumentParser(description="extract and process JSONL data where judgement=='right'")
     parser.add_argument("--input-jsonl", required=True)
     parser.add_argument("--output-jsonl", required=True)
     parser.add_argument(

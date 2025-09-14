@@ -8,13 +8,9 @@ from huggingface_hub.errors import HfHubHTTPError
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(
-        description="Delete Hugging Face repos by regex, with a mandatory dry-run first."
-    )
+    p = argparse.ArgumentParser(description="Delete Hugging Face repos by regex, with a mandatory dry-run first.")
     p.add_argument("--owner", required=True, help="User or org (e.g., tokyotech-llm)")
-    p.add_argument(
-        "--repo-type", choices=["model", "dataset", "space"], default="model"
-    )
+    p.add_argument("--repo-type", choices=["model", "dataset", "space"], default="model")
     p.add_argument("--name-regex", required=True, help="Regex to match repos to delete")
     p.add_argument(
         "--execute",
@@ -79,9 +75,7 @@ def main() -> None:
         print("  (no matches)")
 
     if not args.execute:
-        print(
-            "\nDry-run only. No deletions performed. Re-run with --execute to delete."
-        )
+        print("\nDry-run only. No deletions performed. Re-run with --execute to delete.")
         return
 
     if not targets:
@@ -89,14 +83,7 @@ def main() -> None:
         return
 
     if not args.yes:
-        resp = (
-            input(
-                "\nThe above repositories will be permanently deleted. "
-                "Type 'yes' to proceed: "
-            )
-            .strip()
-            .lower()
-        )
+        resp = input("\nThe above repositories will be permanently deleted. Type 'yes' to proceed: ").strip().lower()
         if resp != "yes":
             print("Aborted.")
             return

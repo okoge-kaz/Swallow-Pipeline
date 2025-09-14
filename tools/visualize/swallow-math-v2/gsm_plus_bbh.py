@@ -361,9 +361,7 @@ ax2.grid(True, linestyle="--", alpha=0.3)
 ax2.spines["top"].set_visible(False)
 ax2.spines["right"].set_visible(False)
 
-fig.legend(
-    exp_labels, loc="lower center", bbox_to_anchor=(0.5, -0.08), ncol=4, fontsize=12
-)
+fig.legend(exp_labels, loc="lower center", bbox_to_anchor=(0.5, -0.08), ncol=4, fontsize=12)
 
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.10)

@@ -73,15 +73,9 @@ Answer: クロロフィルの吸収スペクトルは、主に青と赤の波長
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments with clear defaults and type hints."""
     parser = argparse.ArgumentParser(description="Generate QA from JSONL using vLLM.")
-    parser.add_argument(
-        "--input-jsonl", type=str, required=True, help="Path to input JSONL file."
-    )
-    parser.add_argument(
-        "--output-jsonl", type=str, required=True, help="Path to output JSONL file."
-    )
-    parser.add_argument(
-        "--model-path", type=str, required=True, help="Path to the vLLM model."
-    )
+    parser.add_argument("--input-jsonl", type=str, required=True, help="Path to input JSONL file.")
+    parser.add_argument("--output-jsonl", type=str, required=True, help="Path to output JSONL file.")
+    parser.add_argument("--model-path", type=str, required=True, help="Path to the vLLM model.")
     parser.add_argument(
         "--qa-mode",
         type=str,
@@ -102,9 +96,7 @@ def parse_args() -> argparse.Namespace:
         default="ja",
         help="Prompt language: 'ja' (Japanese) or 'en' (English).",
     )
-    parser.add_argument(
-        "--chunk-max-tokens", type=int, default=1024, help="Max tokens per text chunk."
-    )
+    parser.add_argument("--chunk-max-tokens", type=int, default=1024, help="Max tokens per text chunk.")
     parser.add_argument(
         "--gen-max-tokens",
         type=int,
@@ -160,39 +152,21 @@ def parse_generated_text(text: str, qa_mode: str) -> Dict[str, Union[str, List[s
     try:
         if qa_mode == "choices":
             qa["question"] = next(
-                (
-                    line.split("Question: ")[1]
-                    for line in lines
-                    if line.startswith("Question: ")
-                ),
+                (line.split("Question: ")[1] for line in lines if line.startswith("Question: ")),
                 "",
             )
-            qa["options"] = [
-                line for line in lines if line.startswith(("A.", "B.", "C.", "D."))
-            ]
+            qa["options"] = [line for line in lines if line.startswith(("A.", "B.", "C.", "D."))]
             qa["answer"] = next(
-                (
-                    line.split("Answer: ")[1]
-                    for line in lines
-                    if line.startswith("Answer: ")
-                ),
+                (line.split("Answer: ")[1] for line in lines if line.startswith("Answer: ")),
                 "",
             )
         else:
             qa["question"] = next(
-                (
-                    line.split("Question: ")[1]
-                    for line in lines
-                    if line.startswith("Question: ")
-                ),
+                (line.split("Question: ")[1] for line in lines if line.startswith("Question: ")),
                 "",
             )
             qa["answer"] = next(
-                (
-                    line.split("Answer: ")[1]
-                    for line in lines
-                    if line.startswith("Answer: ")
-                ),
+                (line.split("Answer: ")[1] for line in lines if line.startswith("Answer: ")),
                 "",
             )
     except Exception as e:
@@ -268,9 +242,7 @@ def process_batch(
                             + f"\nAnswer: {qa['answer']}\n"
                         )
                     else:
-                        item["text"] += (
-                            f"\n\nQuestion: {qa['question']}\nAnswer: {qa['answer']}\n"
-                        )
+                        item["text"] += f"\n\nQuestion: {qa['question']}\nAnswer: {qa['answer']}\n"
         item["question_answers"] = item_qas
 
     return processed_lines

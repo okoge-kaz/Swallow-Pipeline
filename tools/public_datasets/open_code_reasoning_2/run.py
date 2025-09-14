@@ -25,9 +25,7 @@ def process_jsonl_file(input_file: Path, output_file: Path, mode: str) -> None:
             try:
                 data = json.loads(line)
                 if "judgement" not in data:
-                    print(
-                        f"Warning: {line_num}'s data does not contain 'judgement' field."
-                    )
+                    print(f"Warning: {line_num}'s data does not contain 'judgement' field.")
                     error_count += 1
                     continue
 
@@ -44,9 +42,7 @@ def process_jsonl_file(input_file: Path, output_file: Path, mode: str) -> None:
                 else:
                     raise ValueError(f"Unsupported mode: {mode}")
 
-                missing_fields = [
-                    field for field in required_fields if field not in data
-                ]
+                missing_fields = [field for field in required_fields if field not in data]
                 if missing_fields:
                     print(
                         f"Warning: {line_num}'s data is missing fields: {', '.join(missing_fields)}",
@@ -57,18 +53,10 @@ def process_jsonl_file(input_file: Path, output_file: Path, mode: str) -> None:
 
                 # construct text based on mode
                 if mode == "solution":
-                    text_content = (
-                        "Question:\n\n"
-                        + str(data["question"])
-                        + "\n\nSolution:\n\n"
-                        + str(data["solution"])
-                    )
+                    text_content = "Question:\n\n" + str(data["question"]) + "\n\nSolution:\n\n" + str(data["solution"])
                 else:  # r1_generation
                     text_content = (
-                        "Question:\n\n"
-                        + str(data["question"])
-                        + "\n\nSolution:\n\n"
-                        + str(data["r1_generation"])
+                        "Question:\n\n" + str(data["question"]) + "\n\nSolution:\n\n" + str(data["r1_generation"])
                     )
 
                 output_data = data.copy()
@@ -93,9 +81,7 @@ def process_jsonl_file(input_file: Path, output_file: Path, mode: str) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="extract and process JSONL data where judgement=='right'"
-    )
+    parser = argparse.ArgumentParser(description="extract and process JSONL data where judgement=='right'")
     parser.add_argument("--input-jsonl", required=True)
     parser.add_argument("--output-jsonl", required=True)
     parser.add_argument(

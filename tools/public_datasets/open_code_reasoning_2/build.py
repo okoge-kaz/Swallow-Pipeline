@@ -88,17 +88,13 @@ def process_and_save_dataset(output_dir, output_format="jsonl"):
             question = get_question(hf_datasets, ds_name, ds_split, ds_index)
 
             if question is None:
-                print(
-                    f"Warning: No question found for {ds_name} - {ds_split}/{ds_index}"
-                )
+                print(f"Warning: No question found for {ds_name} - {ds_split}/{ds_index}")
                 error_count += 1
                 processed_items.append(processed_item)
                 continue
 
             if processed_item["question"] != "-":
-                print(
-                    f"Warning: question already exists for {ds_name} - {ds_split}/{ds_index}"
-                )
+                print(f"Warning: question already exists for {ds_name} - {ds_split}/{ds_index}")
 
             processed_item["question"] = question
             processed_items.append(processed_item)

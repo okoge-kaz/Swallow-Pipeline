@@ -30,17 +30,13 @@ def _batches_from_ipc_stream(path: str) -> Generator[pa.RecordBatch, None, None]
             yield batch
 
 
-def _batches_from_feather(
-    path: str, batch_size: int
-) -> Generator[pa.RecordBatch, None, None]:
+def _batches_from_feather(path: str, batch_size: int) -> Generator[pa.RecordBatch, None, None]:
     table = feather.read_table(path, memory_map=True)
     for batch in table.to_batches(max_chunksize=batch_size):
         yield batch
 
 
-def record_batches_from_arrow(
-    path: str, batch_size: int
-) -> Generator[pa.RecordBatch, None, None]:
+def record_batches_from_arrow(path: str, batch_size: int) -> Generator[pa.RecordBatch, None, None]:
     suffix = Path(path).suffix.lower()
 
     if suffix == ".feather":
@@ -75,9 +71,7 @@ def record_batches_from_arrow(
         ) from e_feather
 
 
-def convert_arrow_to_jsonl(
-    arrow_file_path: str, jsonl_file_path: str, batch_size: int = 65536
-) -> None:
+def convert_arrow_to_jsonl(arrow_file_path: str, jsonl_file_path: str, batch_size: int = 65536) -> None:
     def rows() -> Generator[Dict, None, None]:
         for batch in record_batches_from_arrow(arrow_file_path, batch_size):
             table = pa.Table.from_batches([batch])
@@ -85,24 +79,18 @@ def convert_arrow_to_jsonl(
                 yield row
 
     write_jsonl(rows(), jsonl_file_path)
-    print(
-        f"Arrow file '{arrow_file_path}' has been converted to JSONL and saved as '{jsonl_file_path}'."
-    )
+    print(f"Arrow file '{arrow_file_path}' has been converted to JSONL and saved as '{jsonl_file_path}'.")
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(
-        description="Convert an Arrow (IPC/Feather) file to JSONL."
-    )
+    p = argparse.ArgumentParser(description="Convert an Arrow (IPC/Feather) file to JSONL.")
     p.add_argument(
         "--arrow-file",
         type=str,
         required=True,
         help="Path to input .arrow/.ipc/.feather file.",
     )
-    p.add_argument(
-        "--jsonl-file", type=str, required=True, help="Path to output JSONL file."
-    )
+    p.add_argument("--jsonl-file", type=str, required=True, help="Path to output JSONL file.")
     p.add_argument(
         "--batch-size",
         type=int,

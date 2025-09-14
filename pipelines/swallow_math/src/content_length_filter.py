@@ -43,9 +43,7 @@ def process_file_math_filter(args: Tuple[Path, Path, str, int]) -> Dict[str, Any
 
             # Count tokens
             token_count = len(tokenizer.encode(text))
-            file_stats["max_tokens_seen"] = max(
-                file_stats["max_tokens_seen"], token_count
-            )
+            file_stats["max_tokens_seen"] = max(file_stats["max_tokens_seen"], token_count)
 
             if token_count <= max_tokens:
                 # Keep item
@@ -61,9 +59,7 @@ def process_file_math_filter(args: Tuple[Path, Path, str, int]) -> Dict[str, Any
     if file_stats["items_kept"] > 0:
         file_stats["avg_tokens_kept"] = total_tokens_kept / file_stats["items_kept"]
     if file_stats["items_filtered"] > 0:
-        file_stats["avg_tokens_filtered"] = (
-            total_tokens_filtered / file_stats["items_filtered"]
-        )
+        file_stats["avg_tokens_filtered"] = total_tokens_filtered / file_stats["items_filtered"]
 
     # Write filtered results
     file_stem = input_file.stem
@@ -120,9 +116,7 @@ def math_length_filter(
     print(f"Using {workers} workers for parallel processing")
 
     # Prepare arguments for multiprocessing
-    args_list = [
-        (file_path, output_dir, tokenizer_path, max_tokens) for file_path in jsonl_files
-    ]
+    args_list = [(file_path, output_dir, tokenizer_path, max_tokens) for file_path in jsonl_files]
 
     # Process files in parallel
     start_time = time.time()
@@ -157,24 +151,16 @@ def math_length_filter(
         total_stats["total_items"] += stats["total_items"]
         total_stats["items_kept"] += stats["items_kept"]
         total_stats["items_filtered"] += stats["items_filtered"]
-        total_stats["max_tokens_seen"] = max(
-            total_stats["max_tokens_seen"], stats["max_tokens_seen"]
-        )
+        total_stats["max_tokens_seen"] = max(total_stats["max_tokens_seen"], stats["max_tokens_seen"])
 
         total_tokens_kept_sum += stats["avg_tokens_kept"] * stats["items_kept"]
-        total_tokens_filtered_sum += (
-            stats["avg_tokens_filtered"] * stats["items_filtered"]
-        )
+        total_tokens_filtered_sum += stats["avg_tokens_filtered"] * stats["items_filtered"]
 
     # Calculate overall averages
     if total_stats["items_kept"] > 0:
-        total_stats["avg_tokens_kept"] = (
-            total_tokens_kept_sum / total_stats["items_kept"]
-        )
+        total_stats["avg_tokens_kept"] = total_tokens_kept_sum / total_stats["items_kept"]
     if total_stats["items_filtered"] > 0:
-        total_stats["avg_tokens_filtered"] = (
-            total_tokens_filtered_sum / total_stats["items_filtered"]
-        )
+        total_stats["avg_tokens_filtered"] = total_tokens_filtered_sum / total_stats["items_filtered"]
 
     # Display final statistics
     processing_time = time.time() - start_time
@@ -189,9 +175,7 @@ def math_length_filter(
         f"  Items filtered (>{max_tokens} tokens): {total_stats['items_filtered']} ({total_stats['items_filtered'] / total_stats['total_items'] * 100:.1f}%)"
     )
     print(f"  Average tokens (kept items): {total_stats['avg_tokens_kept']:.1f}")
-    print(
-        f"  Average tokens (filtered items): {total_stats['avg_tokens_filtered']:.1f}"
-    )
+    print(f"  Average tokens (filtered items): {total_stats['avg_tokens_filtered']:.1f}")
     print(f"  Maximum tokens encountered: {total_stats['max_tokens_seen']}")
     print(f"  Filtered files saved to: {output_dir}")
 

@@ -62,12 +62,8 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="Path to input JSONL file containing questions.",
     )
-    parser.add_argument(
-        "--output-jsonl", type=str, required=True, help="Path to output JSONL file."
-    )
-    parser.add_argument(
-        "--model-path", type=str, required=True, help="Path to the vLLM model."
-    )
+    parser.add_argument("--output-jsonl", type=str, required=True, help="Path to output JSONL file.")
+    parser.add_argument("--model-path", type=str, required=True, help="Path to the vLLM model.")
     parser.add_argument(
         "--batch-size",
         type=int,
@@ -135,9 +131,7 @@ def parse_generated_text(text: str) -> Dict[str, str]:
         question_marker = "**Rewritten Question:**"
         start_idx = text.find(question_marker)
         if start_idx == -1:
-            raise ValueError(
-                "No '**Rewritten Question:**' marker found in generated text"
-            )
+            raise ValueError("No '**Rewritten Question:**' marker found in generated text")
 
         # Extract everything after "**Rewritten Question:**" as the question
         question_text = text[start_idx + len(question_marker) :].strip()
@@ -171,9 +165,7 @@ def process_batch(
                 if msg["role"] == "user":
                     msg["content"] = msg["content"].format(question=question.strip())  # type: ignore
             # Apply the chat template to format the prompt
-            prompt = tokenizer.apply_chat_template(
-                formatted_messages, tokenize=False, add_generation_prompt=True
-            )
+            prompt = tokenizer.apply_chat_template(formatted_messages, tokenize=False, add_generation_prompt=True)
             batch_inputs.append(prompt)
             valid_indices.append(local_idx)
 
@@ -229,9 +221,7 @@ def main():
     # Process in batches
     for start_idx in range(0, len(lines), args.batch_size):
         batch_lines = lines[start_idx : start_idx + args.batch_size]
-        processed_lines = process_batch(
-            batch_lines, tokenizer, llm, prompt_template, args.gen_max_tokens
-        )
+        processed_lines = process_batch(batch_lines, tokenizer, llm, prompt_template, args.gen_max_tokens)
         if processed_lines:
             save_to_jsonl(args.output_jsonl, processed_lines)
 

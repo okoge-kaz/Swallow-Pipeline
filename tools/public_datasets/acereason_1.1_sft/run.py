@@ -49,9 +49,7 @@ def iter_jsonl_records(path: Path) -> Iterable[Tuple[int, dict]]:
             try:
                 obj = json.loads(line)
             except json.JSONDecodeError as e:
-                print(
-                    f"[WARN] {path}: line {i}: JSON decode error: {e}", file=sys.stderr
-                )
+                print(f"[WARN] {path}: line {i}: JSON decode error: {e}", file=sys.stderr)
                 continue
             yield i, obj
 
@@ -164,9 +162,7 @@ def process_one_file(args) -> Tuple[Path, Path, Dict[str, int]]:
 
 def discover_input_files(input_dir: Path, recursive: bool) -> List[Path]:
     if recursive:
-        return sorted(
-            list(input_dir.rglob("*.jsonl")) + list(input_dir.rglob("*.jsonl.gz"))
-        )
+        return sorted(list(input_dir.rglob("*.jsonl")) + list(input_dir.rglob("*.jsonl.gz")))
     return sorted(list(input_dir.glob("*.jsonl")) + list(input_dir.glob("*.jsonl.gz")))
 
 
@@ -211,9 +207,7 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Keep <think>…</think> content if set",
     )
-    parser.add_argument(
-        "--recursive", action="store_true", help="Recursively search input files"
-    )
+    parser.add_argument("--recursive", action="store_true", help="Recursively search input files")
     return parser.parse_args()
 
 
@@ -261,12 +255,8 @@ def main() -> None:
             sys.exit(130)
 
         # preserve deterministic merge order following sorted input files
-        math_map = {
-            Path(r[0]).name.replace(".math.tmp.jsonl", ""): Path(r[0]) for r in results
-        }
-        code_map = {
-            Path(r[1]).name.replace(".code.tmp.jsonl", ""): Path(r[1]) for r in results
-        }
+        math_map = {Path(r[0]).name.replace(".math.tmp.jsonl", ""): Path(r[0]) for r in results}
+        code_map = {Path(r[1]).name.replace(".code.tmp.jsonl", ""): Path(r[1]) for r in results}
 
         ordered_math_tmps = [math_map.get(f.name, None) for f in files]
         ordered_code_tmps = [code_map.get(f.name, None) for f in files]

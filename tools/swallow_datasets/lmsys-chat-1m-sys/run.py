@@ -36,15 +36,9 @@ def process_file(input_path: Path, output_path: Path, with_system_prompt: bool) 
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Shuffle JSONL and optionally prepend system message."
-    )
-    parser.add_argument(
-        "--input-jsonl", type=Path, required=True, help="Path to input JSONL file"
-    )
-    parser.add_argument(
-        "--output-jsonl", type=Path, required=True, help="Path to output JSONL file"
-    )
+    parser = argparse.ArgumentParser(description="Shuffle JSONL and optionally prepend system message.")
+    parser.add_argument("--input-jsonl", type=Path, required=True, help="Path to input JSONL file")
+    parser.add_argument("--output-jsonl", type=Path, required=True, help="Path to output JSONL file")
     parser.add_argument(
         "--with-system-prompt",
         action="store_true",

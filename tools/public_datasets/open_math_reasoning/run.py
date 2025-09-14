@@ -47,9 +47,7 @@ def process_jsonl_files(input_directory: str, output_file: str) -> None:
                                 "generated_solution",
                                 "expected_answer",
                             ]
-                            missing_fields = [
-                                field for field in required_fields if field not in data
-                            ]
+                            missing_fields = [field for field in required_fields if field not in data]
 
                             if missing_fields:
                                 print(
@@ -71,15 +69,11 @@ def process_jsonl_files(input_directory: str, output_file: str) -> None:
                             output_data = data.copy()
                             output_data["text"] = text_content
 
-                            outfile.write(
-                                json.dumps(output_data, ensure_ascii=False) + "\n"
-                            )
+                            outfile.write(json.dumps(output_data, ensure_ascii=False) + "\n")
                             processed_count += 1
 
                         except json.JSONDecodeError as e:
-                            print(
-                                f"Error: {jsonl_file.name}:{line_num} - JSON decode error: {e}"
-                            )
+                            print(f"Error: {jsonl_file.name}:{line_num} - JSON decode error: {e}")
                             continue
 
             except Exception as e:

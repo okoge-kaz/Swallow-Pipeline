@@ -88,13 +88,9 @@ def process_file(input_path: str, output_path: str, filter_key: str) -> None:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Process JSONL files for math text extraction and cleaning."
-    )
+    parser = argparse.ArgumentParser(description="Process JSONL files for math text extraction and cleaning.")
 
-    parser.add_argument(
-        "--input-dir", type=str, help="Input directory containing JSONL files."
-    )
+    parser.add_argument("--input-dir", type=str, help="Input directory containing JSONL files.")
     parser.add_argument("--input-jsonl", type=str, help="Single input JSONL file.")
     parser.add_argument(
         "--output-dir",

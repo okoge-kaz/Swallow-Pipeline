@@ -44,9 +44,7 @@ class DataGenerationPipeline:
             max_model_len=self.model_max_length,
         )
 
-        sampling_params = SamplingParams(
-            temperature=temperature, top_p=top_p, max_tokens=max_new_tokens
-        )
+        sampling_params = SamplingParams(temperature=temperature, top_p=top_p, max_tokens=max_new_tokens)
 
         # Apply chat template with thinking mode
         formatted_prompts = []
@@ -75,17 +73,13 @@ def get_generation_pipeline(
 ) -> DataGenerationPipeline:
     """Get data generation pipeline with thinking mode configuration"""
 
-    pipeline = DataGenerationPipeline(
-        model_name, tensor_parallel_size, model_max_length
-    )
+    pipeline = DataGenerationPipeline(model_name, tensor_parallel_size, model_max_length)
     pipeline.set_thinking_mode(enable_thinking)
 
     return pipeline
 
 
-def stream_jsonl(
-    file_path: Path, batch_size: int = 1024
-) -> Iterator[list[dict[str, Any]]]:
+def stream_jsonl(file_path: Path, batch_size: int = 1024) -> Iterator[list[dict[str, Any]]]:
     """Stream JSONL file in batches"""
     batch = []
     with file_path.open("r", encoding="utf-8") as fin:
@@ -177,9 +171,7 @@ def llm_data_generation(
                     fout.write(json.dumps(item, ensure_ascii=False) + "\n")
 
     actual_time = time.time() - start_time
-    print(
-        f"LLM data generation completed: {actual_time:.1f}s total ({actual_time / total_items:.3f}s per item)"
-    )
+    print(f"LLM data generation completed: {actual_time:.1f}s total ({actual_time / total_items:.3f}s per item)")
 
 
 # === CLI Entrypoint ===
@@ -190,30 +182,22 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LLM Data Generation Pipeline")
 
     # Data generation subcommand
-    parser.add_argument(
-        "--input-jsonl", type=Path, required=True, help="Input JSONL file with prompts"
-    )
+    parser.add_argument("--input-jsonl", type=Path, required=True, help="Input JSONL file with prompts")
     parser.add_argument(
         "--output-jsonl",
         type=Path,
         required=True,
         help="Output JSONL file with generated data",
     )
-    parser.add_argument(
-        "--model", type=str, default="qwen-3", help="Model identifier for inference"
-    )
-    parser.add_argument(
-        "--batch-size", type=int, default=32, help="Batch size for GPU processing"
-    )
+    parser.add_argument("--model", type=str, default="qwen-3", help="Model identifier for inference")
+    parser.add_argument("--batch-size", type=int, default=32, help="Batch size for GPU processing")
     parser.add_argument(
         "--tensor-parallel-size",
         type=int,
         default=1,
         help="Number of GPUs to use for tensor parallelism",
     )
-    parser.add_argument(
-        "--model-max-length", type=int, default=40960, help="Maximum model length"
-    )
+    parser.add_argument("--model-max-length", type=int, default=40960, help="Maximum model length")
     parser.add_argument(
         "--enable-thinking",
         action="store_true",

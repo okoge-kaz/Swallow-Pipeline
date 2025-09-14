@@ -52,12 +52,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Build JSONL with {'text': question + '\\n\\n```python\\n' + answer + '\\n```'} from input JSONL."
     )
-    parser.add_argument(
-        "--input-jsonl", type=Path, required=True, help="Path to input JSONL file."
-    )
-    parser.add_argument(
-        "--output-jsonl", type=Path, required=True, help="Path to output JSONL file."
-    )
+    parser.add_argument("--input-jsonl", type=Path, required=True, help="Path to input JSONL file.")
+    parser.add_argument("--output-jsonl", type=Path, required=True, help="Path to output JSONL file.")
     args = parser.parse_args()
     process(args.input_jsonl, args.output_jsonl)
 

@@ -17,9 +17,7 @@ from pipelines.swallow_math.src.prompts import (
 
 
 class MathRewritePipeline:
-    def __init__(
-        self, model_name: str, tensor_parallel_size: int, max_model_len: int
-    ) -> None:
+    def __init__(self, model_name: str, tensor_parallel_size: int, max_model_len: int) -> None:
         self.model_name = model_name
         self.tensor_parallel_size = tensor_parallel_size
         self.max_model_len = max_model_len
@@ -69,9 +67,7 @@ class MathRewritePipeline:
             prompt = cast(str, prompt)
             prompts.append(prompt)
 
-        tokenized_prompts_len = [
-            len(self.tokenizer.encode(prompt)) for prompt in prompts
-        ]
+        tokenized_prompts_len = [len(self.tokenizer.encode(prompt)) for prompt in prompts]
         max_len = max(tokenized_prompts_len)
         if max_len >= self.max_model_len:
             raise ValueError(
@@ -130,9 +126,7 @@ def math_rewrite(
     total_items = 0
     start_time = time.time()
 
-    print(
-        f"Starting math rewriting with {tensor_parallel_size} GPUs using {prompt_type} prompt..."
-    )
+    print(f"Starting math rewriting with {tensor_parallel_size} GPUs using {prompt_type} prompt...")
 
     with output_path.open("w", encoding="utf-8") as fout:
         for batch in stream_jsonl_math(input_path, batch_size):
@@ -140,18 +134,14 @@ def math_rewrite(
             print(f"Processing batch of {len(batch)} items...")
 
             if not all(input_jsonl_key in item for item in batch):
-                raise ValueError(
-                    f"All items in the batch must contain {input_jsonl_key} key for math rewriting"
-                )
+                raise ValueError(f"All items in the batch must contain {input_jsonl_key} key for math rewriting")
             texts = [item.get(input_jsonl_key, "") for item in batch]
 
             try:
                 rewritten_texts = pipeline.rewrite_codes(texts, prompt_type=prompt_type)
 
                 for index, item in enumerate(batch):
-                    rewritten_text = (
-                        rewritten_texts[index] if index < len(rewritten_texts) else ""
-                    )
+                    rewritten_text = rewritten_texts[index] if index < len(rewritten_texts) else ""
                     extracted_math = extract_math_text(rewritten_text)
                     item[llm_output_jsonl_key] = rewritten_text
                     item[math_text_jsonl_key] = extracted_math
@@ -161,9 +151,7 @@ def math_rewrite(
                 print(f"Error during math rewriting: {e}")
 
     actual_time = time.time() - start_time
-    print(
-        f"Math rewriting completed: {actual_time:.1f}s total ({actual_time / total_items:.3f}s per item)"
-    )
+    print(f"Math rewriting completed: {actual_time:.1f}s total ({actual_time / total_items:.3f}s per item)")
 
 
 if __name__ == "__main__":
@@ -212,9 +200,7 @@ if __name__ == "__main__":
         default="Qwen/Qwen3-235B-A22B-Thinking-2507-FP8",
         help="model identifier for vLLM",
     )
-    parser.add_argument(
-        "--batch-size", type=int, default=4096, help="Batch size for processing"
-    )
+    parser.add_argument("--batch-size", type=int, default=4096, help="Batch size for processing")
     parser.add_argument(
         "--tensor-parallel-size",
         type=int,
