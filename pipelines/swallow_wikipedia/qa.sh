@@ -35,6 +35,9 @@ export TOKENIZERS_PARALLELISM="false"
 export PYTHONPATH="/groups/gag51395/fujii/src/swallow-code-v2:$PYTHONPATH"
 export CUDA_VISIBLE_DEVICES="0"
 
+
+PWD=$(pwd)
+export PYTHONPATH=$PWD:$PYTHONPATH
 python pipelines/swallow_wikipedia/qa.py \
   --model-path /groups/gag51395/hf_checkpoints/$MODEL_NAME \
   --input-jsonl "$INPUT_FILE_PATH" \

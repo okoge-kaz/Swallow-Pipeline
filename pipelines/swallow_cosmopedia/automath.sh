@@ -36,6 +36,9 @@ MODEL_NAME=Qwen3-235B-A22B
 
 export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 export TOKENIZERS_PARALLELISM="false"
+
+PWD=$(pwd)
+export PYTHONPATH=$PWD:$PYTHONPATH
 python pipelines/swallow_cosmopedia/cosmopedia.py \
   --input-jsonl $INPUT_FILE_PATH \
   --output-jsonl $OUTPUT_DIR/train_${INDEX}_${MODEL_NAME}.jsonl \

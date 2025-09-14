@@ -38,6 +38,8 @@ mkdir -p $(dirname $OUTPUT_FILE_PATH)
 export TOKENIZERS_PARALLELISM="false"
 export CUDA_VISIBLE_DEVICES="0"
 
+PWD=$(pwd)
+export PYTHONPATH=$PWD:$PYTHONPATH
 python pipelines/swallow_code/rejected/change_qa_style.py \
   --model-path /groups/gag51395/hf_checkpoints/$MODEL_NAME \
   --input-jsonl "$INPUT_FILE_PATH" \

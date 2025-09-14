@@ -31,6 +31,9 @@ mkdir -p $OUTPUT_DIR
 
 export CUDA_VISIBLE_DEVICES=0
 export TOKENIZERS_PARALLELISM="false"
+
+PWD=$(pwd)
+export PYTHONPATH=$PWD:$PYTHONPATH
 python pipelines/swallow_math/src/content_length_filter.py \
   --input-dir $INPUT_DIR \
   --output-dir $OUTPUT_DIR \
