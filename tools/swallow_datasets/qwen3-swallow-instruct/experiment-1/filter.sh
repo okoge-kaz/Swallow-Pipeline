@@ -26,3 +26,8 @@ python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
 python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
   --input-jsonl ${DATASET_DIR}/merged-ja-max.jsonl \
   --output-jsonl ${DATASET_DIR}/train-ja-max.jsonl
+
+DATASET_DIR=/groups/gch51639/fujii/datasets/raw/instruct/swallow/Qwen3-Swallow-SFT/exp8
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
+  --input-jsonl ${DATASET_DIR}/merged.jsonl \
+  --output-jsonl ${DATASET_DIR}/train.jsonl

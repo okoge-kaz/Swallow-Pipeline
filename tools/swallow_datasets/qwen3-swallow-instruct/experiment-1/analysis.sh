@@ -55,3 +55,18 @@ python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/token_length.p
   --input-jsonl $DATASET_DIR/nemotron-post-training-v2-code.jsonl \
   --tokenizer-path /groups/gag51395/hf_checkpoints/Qwen3-8B \
   --plot-path $FIGURE_DIR/nemotron-post-training-v2-code-token-length.png
+
+# Nemotron Post Training v1 code Ja
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/token_length.py \
+  --input-jsonl $DATASET_DIR/nemotron-post-training-v1-code-ja.jsonl \
+  --tokenizer-path /groups/gag51395/hf_checkpoints/Qwen3-8B
+
+# Nemotron Post Training v1 STEM Ja
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/token_length.py \
+  --input-jsonl $DATASET_DIR/nemotron-post-training-v1-stem-ja.jsonl \
+  --tokenizer-path /groups/gag51395/hf_checkpoints/Qwen3-8B
+
+# Nemotron Post Training v1 Math Ja
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/token_length.py \
+  --input-jsonl $DATASET_DIR/nemotron-post-training-v1-math-ja.jsonl \
+  --tokenizer-path /groups/gag51395/hf_checkpoints/Qwen3-8B
