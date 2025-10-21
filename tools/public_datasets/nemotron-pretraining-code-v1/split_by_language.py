@@ -23,9 +23,15 @@ import pyarrow.parquet as pq
 EXT_TO_LANG: Dict[str, str] = {
     # systems
     "c": "c",
-    "h": "headers", "hpp": "headers", "hh": "headers", "hxx": "headers",
-    "cpp": "cpp", "cc": "cpp", "cxx": "cpp",
-    "cu": "cuda", "cuh": "cuda",
+    "h": "headers",
+    "hpp": "headers",
+    "hh": "headers",
+    "hxx": "headers",
+    "cpp": "cpp",
+    "cc": "cpp",
+    "cxx": "cpp",
+    "cu": "cuda",
+    "cuh": "cuda",
     # general
     "py": "python",
     "java": "java",
@@ -36,22 +42,30 @@ EXT_TO_LANG: Dict[str, str] = {
     "cs": "csharp",
     "swift": "swift",
     "kt": "kotlin",
-    "m": "objectivec", "mm": "objectivec",
+    "m": "objectivec",
+    "mm": "objectivec",
     # web
-    "js": "javascript", "jsx": "javascript",
-    "ts": "typescript", "tsx": "typescript",
-    "html": "html", "htm": "html",
+    "js": "javascript",
+    "jsx": "javascript",
+    "ts": "typescript",
+    "tsx": "typescript",
+    "html": "html",
+    "htm": "html",
     "css": "css",
     # configs / data (必要なら保持)
     "json": "json",
-    "yml": "yaml", "yaml": "yaml",
-    "toml": "toml", "ini": "ini",
+    "yml": "yaml",
+    "yaml": "yaml",
+    "toml": "toml",
+    "ini": "ini",
     # docs
     "md": "markdown",
     # db
     "sql": "sql",
     # shells
-    "sh": "shell", "bash": "shell", "zsh": "shell",
+    "sh": "shell",
+    "bash": "shell",
+    "zsh": "shell",
 }
 
 # 許容する言語ディレクトリ（上の値の集合）
@@ -84,6 +98,7 @@ def ext_to_lang(rel_path: Optional[str]) -> Optional[str]:
 
 class RotatingParquetWriter:
     """言語ごとに ParquetWriter を管理し、rows-per-file 毎にローテーション。"""
+
     def __init__(self, out_root: Path, rows_per_file: int, compression: str):
         self.out_root = out_root
         self.rows_per_file = rows_per_file
@@ -172,11 +187,13 @@ def main():
         # Arrow Table に変換して書き込み
         for lang, rows in grouped.items():
             col_repo, col_commit, col_rel = zip(*rows)
-            part = pa.table({
-                "repo": pa.array(col_repo, type=pa.string()),
-                "commit_id": pa.array(col_commit, type=pa.string()),
-                "rel_path": pa.array(col_rel, type=pa.string()),
-            })
+            part = pa.table(
+                {
+                    "repo": pa.array(col_repo, type=pa.string()),
+                    "commit_id": pa.array(col_commit, type=pa.string()),
+                    "rel_path": pa.array(col_rel, type=pa.string()),
+                }
+            )
             writer.write(lang, part)
 
         processed += tbl.num_rows

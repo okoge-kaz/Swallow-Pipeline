@@ -24,7 +24,7 @@ def process_file(input_path: Path, output_path: Path, with_system_prompt: bool) 
                 item["conversation"] = [system_message] + item["conversation"]
 
             if any(len(msg["content"]) <= 0 for msg in item["conversation"]):
-                print(f"[LOG] Skipping item with empty content")
+                print("[LOG] Skipping item with empty content")
                 continue
 
             write_data.append(item)

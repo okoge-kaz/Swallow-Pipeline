@@ -1,9 +1,8 @@
 import argparse
 import json
 import os
-from typing import Dict, List, Union, Optional
+from typing import Dict, List, Union
 from vllm import LLM, SamplingParams
-import torch
 from transformers import AutoTokenizer, PreTrainedTokenizer
 
 # Define the prompt templates for translating both question and code as message structures for chat templates
