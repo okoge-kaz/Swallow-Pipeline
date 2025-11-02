@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import argparse
 import gzip
 import json
@@ -170,7 +167,7 @@ def main():
                 except Exception as e:
                     print(f"[WARN] Token counting failed at line {total}: {e}", file=sys.stderr)
 
-            fout.write(json.dumps(out, ensure_ascii=False) + "\n")   # type: ignore
+            fout.write(json.dumps(out, ensure_ascii=False) + "\n")  # type: ignore
             converted += 1
 
     print(f"[DONE] Converted {converted}/{total} lines.", file=sys.stderr)
