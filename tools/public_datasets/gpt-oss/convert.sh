@@ -51,3 +51,35 @@ python tools/public_datasets/gpt-oss/add_text.py \
 python tools/public_datasets/gpt-oss/add_text.py \
   --input-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/open-math-reasoning/instruct.jsonl \
   --tokenizer-dir /groups/gag51395/hf_checkpoints/gpt-oss-20b
+
+# lmsys chat 1m (ja)
+python tools/public_datasets/gpt-oss/lmsys-chat-1m-gpt-oss.py \
+  --input-jsonl /groups/gch51639/fujii/datasets/raw/instruct/swallow/Qwen3-Swallow-SFT/exp1/lmsys-chat-1m-gpt-oss-ja_delete-repetition.jsonl \
+  --output-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/general-chat/lmsys-chat-1m-gpt-oss-ja_delete-repetition.jsonl \
+  --tokenizer-dir /groups/gag51395/hf_checkpoints/gpt-oss-20b
+
+# lmsys chat 1m (en)
+python tools/public_datasets/gpt-oss/lmsys-chat-1m-gpt-oss.py \
+  --input-jsonl /groups/gch51639/fujii/datasets/raw/instruct/swallow/Qwen3-Swallow-SFT/exp1/lmsys-chat-1m-gpt-oss-en_delete-repetition.jsonl \
+  --output-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/general-chat/lmsys-chat-1m-gpt-oss-en_delete-repetition.jsonl \
+  --tokenizer-dir /groups/gag51395/hf_checkpoints/gpt-oss-20b
+
+# remove gpt-oss-tag
+python tools/public_datasets/gpt-oss/delete_tag.py \
+  --input-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/general-chat/lmsys-chat-1m-gpt-oss-ja_delete-repetition.jsonl \
+  --output-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/general-chat/lmsys-chat-1m-gpt-oss-ja-train.jsonl \
+  --remove
+
+python tools/public_datasets/gpt-oss/delete_tag.py \
+  --input-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/general-chat/lmsys-chat-1m-gpt-oss-en_delete-repetition.jsonl \
+  --output-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/general-chat/lmsys-chat-1m-gpt-oss-en-train.jsonl \
+  --remove
+
+# lmsys chat 1m (text)
+python tools/public_datasets/gpt-oss/add_text.py \
+  --input-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/general-chat/lmsys-chat-1m-gpt-oss-ja-train.jsonl \
+  --tokenizer-dir /groups/gag51395/hf_checkpoints/gpt-oss-20b
+
+python tools/public_datasets/gpt-oss/add_text.py \
+  --input-jsonl /groups/gch51639/fujii/datasets/raw/pretrain/public/gpt-oss-reasoning/general-chat/lmsys-chat-1m-gpt-oss-en-train.jsonl \
+  --tokenizer-dir /groups/gag51395/hf_checkpoints/gpt-oss-20b

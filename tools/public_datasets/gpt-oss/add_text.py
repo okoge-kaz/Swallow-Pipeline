@@ -27,7 +27,7 @@ def _iter_jsonl(fp: IO[str]) -> Iterable[str]:
         yield line
 
 
-def _extract_messages(item: Any, *, idx: int) -> List[Dict[str, Any]]:
+def _extract_messages(item: Any) -> List[Dict[str, Any]]:
     """
     Allow either:
       - dict with key "messages": list[dict]
@@ -35,15 +35,15 @@ def _extract_messages(item: Any, *, idx: int) -> List[Dict[str, Any]]:
     """
     if isinstance(item, dict):
         if "messages" not in item:
-            raise TypeError(f"Item {idx}: dict must contain 'messages' key.")
+            raise TypeError(f"Item: dict must contain 'messages' key.")
         msgs = item["messages"]
     elif isinstance(item, list):
         msgs = item
     else:
-        raise TypeError(f"Item {idx}: must be a dict(with 'messages') or a list of messages.")
+        raise TypeError(f"Item : must be a dict(with 'messages') or a list of messages.")
 
     if not isinstance(msgs, list):
-        raise TypeError(f"Item {idx}: 'messages' must be a list.")
+        raise TypeError(f"Item: 'messages' must be a list.")
     return msgs  # type: ignore[return-value]
 
 
@@ -90,15 +90,16 @@ def main():
                     continue
 
                 # Compute messages & render
-                msgs = _extract_messages(item, idx=i)
+                msgs = _extract_messages(item)
                 try:
                     rendered = tok.apply_chat_template(
                         conversation=msgs,
                         tokenize=False,
                         model_identity=item.get("model_identity") if isinstance(item, dict) else None,
-                        add_generation_prompt=args.add_generation_prompt
+                        add_generation_prompt=args.add_generation_prompt,
                     )
                 except Exception as e:
+                    print(f"[ERROR] apply_chat_template failed at line {i}: {e}", flush=True)
                     raise RuntimeError(f"apply_chat_template failed at line {i}: {e}")
 
                 # Ensure dict so we can attach "text"
