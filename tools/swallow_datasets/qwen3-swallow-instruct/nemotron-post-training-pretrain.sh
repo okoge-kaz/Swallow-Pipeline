@@ -101,3 +101,37 @@ python tools/swallow_datasets/qwen3-swallow-instruct/lmsys-chat-1m-convert.py \
   --gpt-oss-tokenizer "openai/gpt-oss-120b" \
   --model-identity "You are ChatGPT, a large language model trained by OpenAI." \
   --reasoning-effort "medium"
+
+##################################################################
+
+# no thinking trajectory dataset
+
+# code
+INPUT_DIR=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/code
+OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/code/pretrain/nemotron-post-training-v1-code-deepseek-r1-no-thinking-trajectory.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pretrain-no-think.py \
+  --input-dir $INPUT_DIR \
+  --output-jsonl $OUTPUT_PATH \
+  --input-target-key "conversation" \
+  --qwen3-tokenizer "Qwen/Qwen3-235B-A22B"
+
+# math
+INPUT_DIR=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/math
+OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/math/pretrain/nemotron-post-training-v1-math-deepseek-r1-no-thinking-trajectory.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pretrain-no-think.py \
+  --input-dir $INPUT_DIR \
+  --output-jsonl $OUTPUT_PATH \
+  --input-target-key "conversation" \
+  --qwen3-tokenizer "Qwen/Qwen3-235B-A22B"
+
+# science
+INPUT_DIR=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/science
+OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/science/pretrain/nemotron-post-training-v1-science-deepseek-r1-no-thinking-trajectory.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pretrain-no-think.py \
+  --input-dir $INPUT_DIR \
+  --output-jsonl $OUTPUT_PATH \
+  --input-target-key "conversation" \
+  --qwen3-tokenizer "Qwen/Qwen3-235B-A22B"
