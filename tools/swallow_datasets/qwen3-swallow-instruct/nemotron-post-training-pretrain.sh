@@ -74,7 +74,7 @@ python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pret
 
 # Nemotron-Post-Training Math gpt-oss
 INPUT_DIR=/groups/gch51639/fujii/datasets/raw/instruct/swallow/Qwen3-Swallow-SFT/swallow-sft-reasoning/stem/gpt-oss-120b/medium/
-OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/math/pretrain/nemotron-post-training-v1-math-gpt-oss-model-identity-chat-gpt.jsonl
+OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/science/pretrain/nemotron-post-training-v1-science-gpt-oss-model-identity-chat-gpt.jsonl
 
 python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pretrain.py \
   --input-dir $INPUT_DIR \
