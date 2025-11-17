@@ -7,7 +7,6 @@ from typing import List, Dict, Any
 from transformers import AutoTokenizer, PreTrainedTokenizer
 
 
-
 def contains_invalid_tag(conversation: list[dict[str, str]]) -> bool:
     for turn in conversation:
         for k, v in turn.items():

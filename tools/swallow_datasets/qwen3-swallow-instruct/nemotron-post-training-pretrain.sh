@@ -135,3 +135,13 @@ python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pret
   --output-jsonl $OUTPUT_PATH \
   --input-target-key "conversation" \
   --qwen3-tokenizer "Qwen/Qwen3-235B-A22B"
+
+# lmsys-chat-1m
+INPUT_DIR=/groups/gch51639/fujii/datasets/raw/instruct/swallow/Qwen3-Swallow-SFT/swallow-sft-reasoning/chat-raw
+OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-no-thinking-trajectory.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pretrain-no-think.py \
+  --input-dir $INPUT_DIR \
+  --output-jsonl $OUTPUT_PATH \
+  --input-target-key "conversation" \
+  --qwen3-tokenizer "Qwen/Qwen3-235B-A22B"
