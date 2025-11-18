@@ -15,6 +15,20 @@ FORBIDDEN_TAGS = {
     "<|return|>",
 }
 
+INVALID_TRANSLATED_ERRORS = [
+    "以上が問題文の日本語訳です。解答は求められていませんので、実装は行わないでください。",
+    "以上が問題文の日本語訳です。",
+    "以上が日本語訳です。",
+    "以上が翻訳文です。",
+    "以上が翻訳です。",
+    "問題文の日本語訳は以上です。",
+    "問題文の翻訳は以上です。",
+    "解答は求められていません",
+    "実装は行わないでください",
+    "解答を実装しないでください",
+    "解答は不要です",
+]
+
 
 def contains_invalid_tag(conversation: list[dict[str, str]]) -> bool:
     for turn in conversation:
@@ -34,6 +48,12 @@ def contains_invalid_tag(conversation: list[dict[str, str]]) -> bool:
                 if tag in v:
                     print(f"Found forbidden tag {tag} in value: {v}")
                     return True
+
+            if k == "content":
+                for err_msg in INVALID_TRANSLATED_ERRORS:
+                    if err_msg in v:
+                        print(f"Found invalid translated error message in content: {v}")
+                        return True
     return False
 
 
