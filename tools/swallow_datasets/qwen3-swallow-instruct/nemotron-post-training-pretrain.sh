@@ -102,6 +102,22 @@ python tools/swallow_datasets/qwen3-swallow-instruct/lmsys-chat-1m-convert.py \
   --model-identity "You are ChatGPT, a large language model trained by OpenAI." \
   --reasoning-effort "medium"
 
+
+# lmsys-chat-1m (English) okazaki lab
+INPUT_DIR=/groups/gag51395/datasets/instruct/lmsys-chat-1m/sft
+OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt-en.jsonl
+
+mkdir -p $(dirname $OUTPUT_PATH)
+
+python tools/swallow_datasets/qwen3-swallow-instruct/lmsys-chat-1m-convert.py \
+  --input-jsonl $INPUT_DIR/lmsys-chat-1m_synthesized_single-turn_conversation_gpt-oss-medium_sft-wo-pii-and-template-instructions-wo-non-toxic-refusal_English.jsonl \
+  --output-jsonl $OUTPUT_PATH \
+  --input-target-key "conversation" \
+  --qwen3-tokenizer "Qwen/Qwen3-235B-A22B" \
+  --gpt-oss-tokenizer "openai/gpt-oss-120b" \
+  --model-identity "You are ChatGPT, a large language model trained by OpenAI." \
+  --reasoning-effort "medium"
+
 ##################################################################
 
 # no thinking trajectory dataset
