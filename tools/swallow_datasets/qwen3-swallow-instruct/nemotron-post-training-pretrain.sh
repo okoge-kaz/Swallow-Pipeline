@@ -204,3 +204,31 @@ python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pret
   --model-identity "You are ChatGPT, a large language model trained by OpenAI."
 
 # Total invalid records skipped: 2764
+
+# Nemotron Post Training Code (gpt-oss) reasoning-effort: high
+
+INPUT_DIR=/groups/gch51639/fujii/datasets/raw/instruct/public/Nemotron-Post-Training-Dataset-v1/code-jsonl/gpt-oss-120b/high
+OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/code/pretrain/nemotron-post-training-v1-code-gpt-oss-model-identity-chat-gpt-reasoning-effort-high.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pretrain.py \
+  --input-dir $INPUT_DIR \
+  --output-jsonl $OUTPUT_PATH \
+  --input-target-key "conversation" \
+  --qwen3-tokenizer "Qwen/Qwen3-235B-A22B" \
+  --gpt-oss-tokenizer "openai/gpt-oss-120b" \
+  --reasoning-effort "high" \
+  --model-identity "You are ChatGPT, a large language model trained by OpenAI."
+
+
+# Nemotron Post Training Math (gpt-oss) reasoning-effort: high
+
+INPUT_DIR=/groups/gch51639/fujii/datasets/raw/instruct/public/Nemotron-Post-Training-Dataset-v1/math-jsonl/gpt-oss-120b/high
+OUTPUT_PATH=/groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/nemotron-post-training-v1/math/pretrain/nemotron-post-training-v1-math-gpt-oss-model-identity-chat-gpt-reasoning-effort-high.jsonl
+python tools/swallow_datasets/qwen3-swallow-instruct/nemotron-post-training-pretrain.py \
+  --input-dir $INPUT_DIR \
+  --output-jsonl $OUTPUT_PATH \
+  --input-target-key "conversation" \
+  --qwen3-tokenizer "Qwen/Qwen3-235B-A22B" \
+  --gpt-oss-tokenizer "openai/gpt-oss-120b" \
+  --reasoning-effort "high" \
+  --model-identity "You are ChatGPT, a large language model trained by OpenAI."
