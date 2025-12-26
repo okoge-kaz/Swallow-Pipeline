@@ -93,3 +93,20 @@ head -n 100000 /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reas
 python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
   --input-jsonl ${SWALLOW_DIR}/exp9/merged.jsonl \
   --output-jsonl ${SWALLOW_DIR}/exp9/train.jsonl
+
+# Exp10
+head -n 50000 /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt.jsonl >> ${SWALLOW_DIR}/exp10/merged.jsonl
+head -n 50000 /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt-en.jsonl >> ${SWALLOW_DIR}/exp10/merged.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
+  --input-jsonl ${SWALLOW_DIR}/exp10/merged.jsonl \
+  --output-jsonl ${SWALLOW_DIR}/exp10/train.jsonl
+
+# Exp11
+head -n 200000 ${NEMOTRON_DIR}/code/pretrain/nemotron-post-training-v1-code-gpt-oss-model-identity-chat-gpt-reasoning-effort-high.jsonl >> ${SWALLOW_DIR}/exp11/merged.jsonl
+head -n 200000 ${NEMOTRON_DIR}/math/pretrain/nemotron-post-training-v1-math-gpt-oss-model-identity-chat-gpt-reasoning-effort-high.jsonl >> ${SWALLOW_DIR}/exp11/merged.jsonl
+head -n 100000 ${NEMOTRON_DIR}/science/pretrain/nemotron-post-training-v1-science-gpt-oss-model-identity-chat-gpt-reasoning-effort-high.jsonl >> ${SWALLOW_DIR}/exp11/merged.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
+  --input-jsonl ${SWALLOW_DIR}/exp11/merged.jsonl \
+  --output-jsonl ${SWALLOW_DIR}/exp11/train.jsonl
