@@ -110,3 +110,46 @@ head -n 100000 ${NEMOTRON_DIR}/science/pretrain/nemotron-post-training-v1-scienc
 python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
   --input-jsonl ${SWALLOW_DIR}/exp11/merged.jsonl \
   --output-jsonl ${SWALLOW_DIR}/exp11/train.jsonl
+
+# Qwen 3 Swallow SFT v0.2 (Exp1)
+OUTPUT_DIR=/groups/gch51639/fujii/datasets/raw/instruct/swallow/Qwen-3-Swallow-SFT-v0.2/exp1
+head -n 200000 ${NEMOTRON_DIR}/code/nemotron-post-training-v1-code-deepseek-r1.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 200000 ${NEMOTRON_DIR}/math/nemotron-post-training-v1-math-deepseek-r1.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 100000 ${NEMOTRON_DIR}/science/nemotron-post-training-v1-science-deepseek-r1.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+cat /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+cat /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt-en.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
+  --input-jsonl ${OUTPUT_DIR}/merged.jsonl \
+  --output-jsonl ${OUTPUT_DIR}/train.jsonl
+
+# Qwen 3 Swallow SFT v0.2 (Exp2)
+OUTPUT_DIR=/groups/gch51639/fujii/datasets/raw/instruct/swallow/Qwen-3-Swallow-SFT-v0.2/exp2
+head -n 100000 ${NEMOTRON_DIR}/code/pretrain/nemotron-post-training-v1-code-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 100000 ${NEMOTRON_DIR}/math/pretrain/nemotron-post-training-v1-math-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 50000 ${NEMOTRON_DIR}/science/pretrain/nemotron-post-training-v1-science-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 100000 ${NEMOTRON_DIR}/code/pretrain/nemotron-post-training-v1-ja-code-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 100000 ${NEMOTRON_DIR}/math/pretrain/nemotron-post-training-v1-ja-math-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 50000 ${NEMOTRON_DIR}/science/pretrain/nemotron-post-training-v1-ja-science-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+cat /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+cat /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt-en.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
+  --input-jsonl ${OUTPUT_DIR}/merged.jsonl \
+  --output-jsonl ${OUTPUT_DIR}/train.jsonl
+
+
+# Qwen 3 Swallow SFT v0.2 (Exp3)
+OUTPUT_DIR=/groups/gch51639/fujii/datasets/raw/instruct/swallow/Qwen-3-Swallow-SFT-v0.2/exp3
+head -n 400000 ${NEMOTRON_DIR}/code/pretrain/nemotron-post-training-v1-code-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 400000 ${NEMOTRON_DIR}/math/pretrain/nemotron-post-training-v1-math-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 200000 ${NEMOTRON_DIR}/science/pretrain/nemotron-post-training-v1-science-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 200000 ${NEMOTRON_DIR}/code/pretrain/nemotron-post-training-v1-ja-code-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 200000 ${NEMOTRON_DIR}/math/pretrain/nemotron-post-training-v1-ja-math-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+head -n 100000 ${NEMOTRON_DIR}/science/pretrain/nemotron-post-training-v1-ja-science-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+cat /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+cat /groups/gch51639/fujii/datasets/raw/pretrain/swallow/swallow-reasoning/lmsys-chat-1m/pretrain/lmsys-chat-1m-okazaki-lab-gpt-oss-model-identity-chat-gpt-en.jsonl >> ${OUTPUT_DIR}/merged.jsonl
+
+python tools/swallow_datasets/qwen3-swallow-instruct/experiment-1/filter.py \
+  --input-jsonl ${OUTPUT_DIR}/merged.jsonl \
+  --output-jsonl ${OUTPUT_DIR}/train.jsonl
